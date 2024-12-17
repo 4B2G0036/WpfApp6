@@ -1,4 +1,10 @@
-﻿using System.Text;
+﻿using Microsoft.Win32;
+using System.IO;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -124,6 +130,41 @@ namespace WpfApp6
         {
             selectedCourse = lbCourse.SelectedItem as Course;
             StatusLabel.Content = $"選取課程 {selectedCourse.CourseName}";
+        }
+
+        private void lvRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedRecord = lvRecord.SelectedItem as Record;
+            StatusLabel.Content = $"選取紀錄 {selectedRecord}";
+        }
+
+        private void btndel_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedRecord != null)
+            {
+                records.Remove(selectedRecord);
+                lvRecord.ItemsSource = records;
+                lvRecord.Items.Refresh();
+            }
+        }
+
+        private void btnsave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json File(*.json)|*.json|All Files|*.*";
+            saveFileDialog.DefaultExt = "json";
+            saveFileDialog.AddExtension = true;
+            if(saveFileDialog.ShowDialog() == true)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions()
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    WriteIndented = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+                String jsonString = JsonSerializer.Serialize(records, options);
+                File.WriteAllText(saveFileDialog.FileName, jsonString);
+            }
         }
     }
 }

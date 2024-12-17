@@ -81,13 +81,18 @@
         </TabControl>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Button x:Name="btnAdd" Content="選課" Width="80" Height="50" Margin="0, 100, 0, 0" Click="btnAdd_Click"/>
-            <Button x:Name="btndel" Content="退選" Width="80" Height="50" Margin="0, 10, 0, 0"/>
-            <Button x:Name="btnsave" Content="儲存" Width="80" Height="50" Margin="0, 10, 0, 0" FontWeight="Bold"/>
+            <Button x:Name="btndel" Content="退選" Width="80" Height="50" Margin="0, 10, 0, 0" Click="btndel_Click"/>
+            <Button x:Name="btnsave" Content="儲存" Width="80" Height="50" Margin="0, 10, 0, 0" FontWeight="Bold" Click="btnsave_Click"/>
         </StackPanel>
-        <ListView x:Name="lvRecord" Grid.Column="2" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView x:Name="lvRecord" Grid.Column="2" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="lvRecord_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="學號" DisplayMemberBinding="{Binding SelectedStudent.StudentId}"/>
+                    <GridViewColumn Header="姓名" DisplayMemberBinding="{Binding SelectedStudent.StudentName}"/>
+                    <GridViewColumn Header="課程名稱" DisplayMemberBinding="{Binding SelectedCourse.CourseName}"/>
+                    <GridViewColumn Header="學分" DisplayMemberBinding="{Binding SelectedCourse.Point}"/>
+                    <GridViewColumn Header="類別" DisplayMemberBinding="{Binding SelectedCourse.Type}"/>
+                    <GridViewColumn Header="開課班級" DisplayMemberBinding="{Binding SelectedCourse.OpeningClass}"/>
                 </GridView>
             </ListView.View>
         </ListView>
